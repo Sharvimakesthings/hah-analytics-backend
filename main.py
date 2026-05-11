@@ -44,7 +44,7 @@ def to_null(df: pd.DataFrame) -> pd.DataFrame:
         df[col] = df[col].apply(lambda x: None if isinstance(x, float) and (x != x) else x)
     return df
 
-def chunk_insert(table: str, records: list, chunk_size: int = 500) -> int:
+def chunk_insert(table: str, records: list, chunk_size: int = 100) -> int:
     inserted = 0
     for i in range(0, len(records), chunk_size):
         chunk = records[i:i + chunk_size]
