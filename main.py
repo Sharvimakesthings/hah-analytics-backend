@@ -38,7 +38,11 @@ def clean_str_cols(df: pd.DataFrame) -> pd.DataFrame:
 
 def to_null(df: pd.DataFrame) -> pd.DataFrame:
     """Replace NaN/blanks with None for JSON serialization."""
-    return df.where(pd.notnull(df), None)
+    df = df.where(pd.notnull(df), None)
+    # Extra safety: convert any remaining nan in numeric cols to None
+    for col in df.columns:
+        df[col] = df[col].apply(lambda x: None if isinstance(x, float) and (x != x) else x)
+    return df
 
 def chunk_insert(table: str, records: list, chunk_size: int = 500) -> int:
     inserted = 0
